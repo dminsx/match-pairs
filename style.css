@@ -51,36 +51,43 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #5ca4a7;
   border-radius: 15px;
+  border-style: none;
   background: linear-gradient(150deg, #5ca4a7, #076465);
   transition: transform 0.3s ease;
+  box-shadow: 0px 0px 5px 0px #252525;
 
   &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    background: linear-gradient(150deg, #ed9954, #52472e);
+    transform: scale(1.03);
   }
 }
 
 .card--active {
+  font-size: 75px;
   background: linear-gradient(150deg, #ed9954, #52472e);
+}
+
+.card--matched {
+  font-size: 50px;
+  background: linear-gradient(150deg, #f4ac5c, #ed9954);
+  opacity: 100%;
+  transition: none;
+  &:hover {
+    transform: none;
+  }
 }
 
 .footer {
   display: flex;
 }
 
-.new-game {
-  background: #5ca4a7;
+#new-game {
+  background: linear-gradient(150deg, #5ca4a7, #076465);
   border-style: none;
   border-radius: 15px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 23px;
-
-  color: #dfdfdf;
+  color: #000000;
   padding: 10px 15px 7px 15px;
   transition: transform 0.3s ease;
 
@@ -89,7 +96,7 @@ body {
   }
 
   &:active {
-    background: #076465;
+    background: linear-gradient(150deg, #076465, #000000);
     transform: scale(1);
   }
 }
