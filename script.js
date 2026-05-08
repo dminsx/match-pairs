@@ -1,5 +1,7 @@
 const cards = document.querySelectorAll(".card");
 const newGame = document.getElementById("new-game");
+const score = document.getElementById("score");
+const attempts = document.getElementById("attempts");
 
 const emoji = [
   "⛲",
@@ -22,14 +24,40 @@ const emoji = [
 
 let firstCard = null;
 let secondCard = null;
-let lockBoard;
-let score = 0;
-let attempts = 0;
+let scoreCount = 0;
+let attemptsCount = 0;
 
 function shuffleEmoji() {
   let newEmoji = emoji.sort(() => Math.random() - 0.5);
   cards.forEach((card, index) => {
     card.dataset.symbol = newEmoji[index];
+  });
+}
+
+function matchedPair() {
+  activeCards.forEach((match) => {
+    match.classList.remove("card--active");
+    match.classList.add("card--matched");
+    firstCard = null;
+    secondCard = null;
+    cards.forEach((reset) => {
+      reset.disabled = false;
+    });
+  });
+  score.textContent = scoreCount += 1;
+}
+
+function misMatchedPair() {
+  activeCards.forEach((match) => {
+    match.classList.remove("card--active");
+    match.textContent = "";
+    firstCard = null;
+    secondCard = null;
+    cards.forEach((reset) => {
+      if (!reset.classList.contains("card--matched")) {
+        reset.disabled = false;
+      }
+    });
   });
 }
 
@@ -43,8 +71,8 @@ newGame.addEventListener("click", () => {
     card.textContent = "";
     firstCard = null;
     secondCard = null;
-    score = 0;
-    attempts = 0;
+    score.textContent = scoreCount = 0;
+    attempts.textContent = attemptsCount = 0;
   });
 });
 
@@ -78,32 +106,11 @@ cards.forEach((card) => {
           notActive.disabled = true;
         }
       });
-      attempts += 1;
+      attempts.textContent = attemptsCount += 1;
       if (firstCard === secondCard) {
-        activeCards.forEach((match) => {
-          match.classList.remove("card--active");
-          match.classList.add("card--matched");
-          firstCard = null;
-          secondCard = null;
-          score += 1;
-          cards.forEach((reset) => {
-            reset.disabled = false;
-          });
-        });
+        matchedPair();
       } else {
-        setTimeout(() => {
-          activeCards.forEach((match) => {
-            match.classList.remove("card--active");
-            match.textContent = "";
-            firstCard = null;
-            secondCard = null;
-            cards.forEach((reset) => {
-              if (!reset.classList.contains("card--matched")) {
-                reset.disabled = false;
-              }
-            });
-          });
-        }, 600);
+        setTimeout(() => misMatchedPair(), 600);
       }
     }
   });

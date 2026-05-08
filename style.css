@@ -58,18 +58,20 @@ body {
   box-shadow: 0px 0px 5px 0px #252525;
 
   &:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
   }
 }
 
 .card--active {
-  font-size: 75px;
+  font-size: 55px;
   background: linear-gradient(150deg, #ed9954, #52472e);
+  transition: none;
+  transform: scale(1.05);
 }
 
 .card--matched {
-  font-size: 50px;
-  background: linear-gradient(150deg, #f4ac5c, #ed9954);
+  font-size: 75px;
+  background: linear-gradient(150deg, #ccb494, #ed9954);
   opacity: 100%;
   transition: none;
   &:hover {
