@@ -34,7 +34,7 @@ function shuffleEmoji() {
   });
 }
 
-function matchedPair() {
+function handleSetMatchedPair() {
   activeCards.forEach((match) => {
     match.classList.remove("card--active");
     match.classList.add("card--matched");
@@ -44,10 +44,11 @@ function matchedPair() {
       reset.disabled = false;
     });
   });
-  score.textContent = scoreCount += 1;
+  scoreCount += 1;
+  score.textContent = scoreCount;
 }
 
-function misMatchedPair() {
+function handleResetDisabledBoard() {
   activeCards.forEach((match) => {
     match.classList.remove("card--active");
     match.textContent = "";
@@ -71,8 +72,10 @@ newGame.addEventListener("click", () => {
     card.textContent = "";
     firstCard = null;
     secondCard = null;
-    score.textContent = scoreCount = 0;
-    attempts.textContent = attemptsCount = 0;
+    scoreCount = 0;
+    attemptsCount = 0;
+    score.textContent = scoreCount;
+    attempts.textContent = attemptsCount;
   });
 });
 
@@ -100,17 +103,21 @@ cards.forEach((card) => {
     }
 
     activeCards = document.querySelectorAll(".card--active");
+
     if (activeCards.length === 2) {
       cards.forEach((notActive) => {
         if (!notActive.classList.contains("card--matched")) {
           notActive.disabled = true;
         }
       });
-      attempts.textContent = attemptsCount += 1;
+
+      attemptsCount += 1;
+      attempts.textContent = attemptsCount;
+
       if (firstCard === secondCard) {
-        matchedPair();
+        handleSetMatchedPair();
       } else {
-        setTimeout(() => misMatchedPair(), 600);
+        setTimeout(() => handleResetDisabledBoard(), 666);
       }
     }
   });
