@@ -22,6 +22,7 @@ const emoji = [
   "🗿",
 ];
 
+let activeCards = document.querySelectorAll(".card--active");
 let firstCard = null;
 let secondCard = null;
 let scoreCount = 0;
@@ -35,6 +36,7 @@ function shuffleEmoji() {
 }
 
 function handleSetMatchedPair() {
+  activeCards = document.querySelectorAll(".card--active");
   activeCards.forEach((match) => {
     match.classList.remove("card--active");
     match.classList.add("card--matched");
@@ -49,6 +51,7 @@ function handleSetMatchedPair() {
 }
 
 function handleResetDisabledBoard() {
+  activeCards = document.querySelectorAll(".card--active");
   activeCards.forEach((match) => {
     match.classList.remove("card--active");
     match.textContent = "";
@@ -62,9 +65,7 @@ function handleResetDisabledBoard() {
   });
 }
 
-shuffleEmoji();
-
-newGame.addEventListener("click", () => {
+function handleResetForNewGame() {
   shuffleEmoji();
   cards.forEach((card) => {
     card.disabled = false;
@@ -77,6 +78,12 @@ newGame.addEventListener("click", () => {
     score.textContent = scoreCount;
     attempts.textContent = attemptsCount;
   });
+}
+
+shuffleEmoji();
+
+newGame.addEventListener("click", () => {
+  handleResetForNewGame();
 });
 
 cards.forEach((card) => {
@@ -96,10 +103,6 @@ cards.forEach((card) => {
       }
       card.textContent = card.dataset.symbol;
       card.classList.add("card--active");
-    } else {
-      card.classList.remove("card--active");
-      card.textContent = "";
-      firstCard = null;
     }
 
     activeCards = document.querySelectorAll(".card--active");
@@ -119,6 +122,13 @@ cards.forEach((card) => {
       } else {
         setTimeout(() => handleResetDisabledBoard(), 666);
       }
+    }
+
+    if (scoreCount === 8) {
+      setTimeout(() => {
+        alert(`Поздравляю, вы закончили игру за ${attemptsCount} попыток`);
+        handleResetForNewGame();
+      }, 333);
     }
   });
 });
