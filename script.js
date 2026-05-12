@@ -25,7 +25,7 @@ const emoji = [
 let activeCards = document.querySelectorAll(".card--active");
 let firstCard = null;
 let secondCard = null;
-let scoreCount = 0;
+let scoreCount = 1;
 let attemptsCount = 0;
 
 function shuffleEmoji() {
