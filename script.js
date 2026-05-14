@@ -22,7 +22,6 @@ const emoji = [
   "🗿",
 ];
 
-let activeCards = document.querySelectorAll(".card--active");
 let firstCard = null;
 let secondCard = null;
 let scoreCount = 0;
@@ -41,32 +40,26 @@ function shuffleEmoji() {
 }
 
 function handleSetMatchedPair() {
-  activeCards = document.querySelectorAll(".card--active");
-  activeCards.forEach((match) => {
-    match.classList.remove("card--active");
-    match.classList.add("card--matched");
-    firstCard = null;
-    secondCard = null;
-    cards.forEach((reset) => {
-      reset.disabled = false;
-    });
+  cards.forEach((card) => {
+    if (card.classList.contains("card--active")) {
+      card.classList.remove("card--active");
+      card.classList.add("card--matched");
+      handleResetCards();
+    }
+    card.disabled = false;
   });
-  scoreCount += 1;
+  scoreCount++;
   score.textContent = scoreCount;
 }
 
 function handleResetDisabledBoard() {
-  activeCards = document.querySelectorAll(".card--active");
-  activeCards.forEach((match) => {
-    match.classList.remove("card--active");
-    match.textContent = "";
-    firstCard = null;
-    secondCard = null;
-    cards.forEach((reset) => {
-      if (!reset.classList.contains("card--matched")) {
-        reset.disabled = false;
-      }
-    });
+  cards.forEach((card) => {
+    card.classList.remove("card--active");
+    handleResetCards();
+    if (!card.classList.contains("card--matched")) {
+      card.disabled = false;
+      card.textContent = "";
+    }
   });
 }
 
@@ -76,8 +69,7 @@ function handleResetForNewGame() {
     card.disabled = false;
     card.classList.remove("card--active", "card--matched");
     card.textContent = "";
-    firstCard = null;
-    secondCard = null;
+    handleResetCards();
     scoreCount = 0;
     attemptsCount = 0;
     score.textContent = scoreCount;
@@ -97,10 +89,7 @@ cards.forEach((card) => {
       return;
     }
 
-    if (
-      !card.classList.contains("card--active") &&
-      !card.classList.contains("card--matched")
-    ) {
+    if (!card.classList.contains("card--active")) {
       if (firstCard === null) {
         firstCard = card.dataset.symbol;
       } else {
@@ -110,16 +99,14 @@ cards.forEach((card) => {
       card.classList.add("card--active");
     }
 
-    activeCards = document.querySelectorAll(".card--active");
-
-    if (activeCards.length === 2) {
-      cards.forEach((notActive) => {
-        if (!notActive.classList.contains("card--matched")) {
-          notActive.disabled = true;
+    if (firstCard && secondCard !== null) {
+      cards.forEach((card) => {
+        if (!card.classList.contains("card--matched")) {
+          card.disabled = true;
         }
       });
 
-      attemptsCount += 1;
+      attemptsCount++;
       attempts.textContent = attemptsCount;
 
       if (firstCard === secondCard) {
