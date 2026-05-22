@@ -27,92 +27,106 @@ let secondCard = null;
 let scoreCount = 0;
 let attemptsCount = 0;
 
-function handleResetCards() {
+function resetCards() {
   firstCard = null;
   secondCard = null;
 }
 
+function updateScore() {
+  score.textContent = scoreCount;
+}
+
+function updateAttempts() {
+  attempts.textContent = attemptsCount;
+}
+
 function shuffleEmoji() {
-  let newEmoji = emoji.sort(() => Math.random() - 0.5);
+  const shuffledEmoji = [...emoji].sort(() => Math.random() - 0.5);
   cards.forEach((card, index) => {
-    card.dataset.symbol = newEmoji[index];
+    card.dataset.symbol = shuffledEmoji[index];
   });
 }
 
-function handleSetMatchedPair() {
+function showCard(card) {
+  card.textContent = card.dataset.symbol;
+  card.classList.add("card--active");
+}
+
+function closeCard(card) {
+  card.disabled = false;
+  card.textContent = "";
+}
+
+function setMatchedPair() {
   cards.forEach((card) => {
     if (card.classList.contains("card--active")) {
       card.classList.remove("card--active");
       card.classList.add("card--matched");
-      handleResetCards();
     }
     card.disabled = false;
   });
   scoreCount++;
-  score.textContent = scoreCount;
+  updateScore();
+  resetCards();
 }
 
-function handleResetDisabledBoard() {
+function resetUnmatchedCards() {
   cards.forEach((card) => {
     card.classList.remove("card--active");
-    handleResetCards();
     if (!card.classList.contains("card--matched")) {
-      card.disabled = false;
-      card.textContent = "";
+      closeCard(card);
     }
   });
+  resetCards();
 }
 
-function handleResetForNewGame() {
+function startNewGame() {
   shuffleEmoji();
   cards.forEach((card) => {
-    card.disabled = false;
     card.classList.remove("card--active", "card--matched");
-    card.textContent = "";
-    handleResetCards();
-    scoreCount = 0;
-    attemptsCount = 0;
-    score.textContent = scoreCount;
-    attempts.textContent = attemptsCount;
+    closeCard(card);
   });
+  resetCards();
+  scoreCount = 0;
+  attemptsCount = 0;
+  updateScore();
+  updateAttempts();
 }
 
 shuffleEmoji();
 
-newGame.addEventListener("click", () => {
-  handleResetForNewGame();
-});
+newGame.addEventListener("click", startNewGame);
 
 cards.forEach((card) => {
   card.addEventListener("click", () => {
-    if (card.classList.contains("card--matched")) {
+    const isActive = card.classList.contains("card--active");
+    const isMatched = card.classList.contains("card--matched");
+    if (isActive || isMatched) {
       return;
     }
 
-    if (!card.classList.contains("card--active")) {
-      if (firstCard === null) {
-        firstCard = card.dataset.symbol;
-      } else {
-        secondCard = card.dataset.symbol;
-      }
-      card.textContent = card.dataset.symbol;
-      card.classList.add("card--active");
+    if (firstCard === null) {
+      firstCard = card.dataset.symbol;
+    } else {
+      secondCard = card.dataset.symbol;
     }
 
-    if (firstCard && secondCard !== null) {
-      cards.forEach((card) => {
-        if (!card.classList.contains("card--matched")) {
-          card.disabled = true;
+    showCard(card);
+
+    if (firstCard !== null && secondCard !== null) {
+      cards.forEach((currentCard) => {
+        if (!currentCard.classList.contains("card--matched")) {
+          currentCard.disabled = true;
         }
       });
 
       attemptsCount++;
-      attempts.textContent = attemptsCount;
+      updateAttempts();
 
       if (firstCard === secondCard) {
-        handleSetMatchedPair();
+        setMatchedPair();
       } else {
-        setTimeout(() => handleResetDisabledBoard(), 666);
+        setTimeout(() => resetUnmatchedCards(), 666);
       }
     }
 
