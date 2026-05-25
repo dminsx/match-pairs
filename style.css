@@ -37,25 +37,28 @@ body {
 }
 
 .main {
+  width: 95%;
+  max-width: 432px;
+  box-sizing: border-box;
   background: linear-gradient(to top, #000000, #076465);
   display: grid;
-  grid-template-columns: 100px 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px 100px;
-  gap: 15px;
-  padding: 15px;
+  gap: 5px;
+  padding: 10px;
   border-radius: 15px;
   box-shadow: 0px 0px 12px 0px #252525;
 }
 
 .card {
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 15px;
+  border-radius: 10px;
   border-style: none;
   background: linear-gradient(150deg, #5ca4a7, #076465);
   transition: transform 0.3s ease;
   box-shadow: 0px 0px 5px 0px #252525;
+  font-size: 23px;
 
   &:hover {
     transform: scale(1.05);
@@ -63,14 +66,12 @@ body {
 }
 
 .card--active {
-  font-size: 55px;
   background: linear-gradient(150deg, #ed9954, #52472e);
   transition: none;
   transform: scale(1.05);
 }
 
 .card--matched {
-  font-size: 75px;
   background: linear-gradient(150deg, #ccb494, #ed9954);
   opacity: 100%;
   transition: none;
