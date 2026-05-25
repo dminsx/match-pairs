@@ -44,48 +44,16 @@ let secondCard = null;
 let scoreCount = 0;
 let attemptsCount = 0;
 
-function winScore() {
-  let winScore = 0;
-  switch (difficulty.value) {
-    case "easy":
-      winScore = 8;
-      break;
-    case "medium":
-      winScore = 18;
-      break;
-    case "hard":
-      winScore = 32;
-      break;
-  }
-  return winScore;
+function getBoardSize() {
+  return Number(difficulty.value);
 }
 
 function createBoard() {
-  switch (difficulty.value) {
-    case "easy":
-      board.style.gridTemplateColumns = "repeat(4, minmax(37px, 1fr))";
-      for (let i = 1; i <= 16; i++) {
-        const newCard = document.createElement("button");
-        newCard.classList.add("card");
-        board.append(newCard);
-      }
-      break;
-    case "medium":
-      board.style.gridTemplateColumns = "repeat(6, minmax(37px, 1fr))";
-      for (let i = 1; i <= 36; i++) {
-        const newCard = document.createElement("button");
-        newCard.classList.add("card");
-        board.append(newCard);
-      }
-      break;
-    case "hard":
-      board.style.gridTemplateColumns = "repeat(8, minmax(37px, 1fr))";
-      for (let i = 1; i <= 64; i++) {
-        const newCard = document.createElement("button");
-        newCard.classList.add("card");
-        board.append(newCard);
-      }
-      break;
+  board.style.gridTemplateColumns = `repeat(${getBoardSize()}, 1fr)`;
+  for (let i = 1; i <= getBoardSize() ** 2; i++) {
+    const newCard = document.createElement("button");
+    newCard.classList.add("card");
+    board.append(newCard);
   }
 }
 
@@ -108,34 +76,15 @@ function updateAttempts() {
 
 function shuffleEmoji() {
   const shuffledEmoji = [...emoji].sort(() => Math.random() - 0.5);
-  switch (difficulty.value) {
-    case "easy":
-      const easyShuffledEmoji = shuffledEmoji
-        .slice(0, 8)
-        .concat(shuffledEmoji.slice(0, 8))
-        .sort(() => Math.random() - 0.5);
-      getCards().forEach((card, index) => {
-        card.dataset.symbol = easyShuffledEmoji[index];
-      });
-      break;
-    case "medium":
-      const mediumShuffledEmoji = shuffledEmoji
-        .slice(0, 18)
-        .concat(shuffledEmoji.slice(0, 18))
-        .sort(() => Math.random() - 0.5);
-      getCards().forEach((card, index) => {
-        card.dataset.symbol = mediumShuffledEmoji[index];
-      });
-      break;
-    case "hard":
-      const hardShuffledEmoji = shuffledEmoji
-        .concat(shuffledEmoji)
-        .sort(() => Math.random() - 0.5);
-      getCards().forEach((card, index) => {
-        card.dataset.symbol = hardShuffledEmoji[index];
-      });
-      break;
-  }
+
+  const shuffledEmojiForLevel = shuffledEmoji
+    .slice(0, getBoardSize() ** 2 / 2)
+    .concat(shuffledEmoji.slice(0, getBoardSize() ** 2 / 2))
+    .sort(() => Math.random() - 0.5);
+
+  getCards().forEach((card, index) => {
+    card.dataset.symbol = shuffledEmojiForLevel[index];
+  });
 }
 
 function showCard(card) {
@@ -209,8 +158,8 @@ function startNewGame() {
           setTimeout(() => resetUnmatchedCards(), 666);
         }
       }
-      console.log(winScore());
-      if (scoreCount === winScore()) {
+
+      if (scoreCount === getBoardSize() ** 2 / 2) {
         setTimeout(() => {
           alert(`Поздравляю, вы закончили игру за ${attemptsCount} попыток`);
           startNewGame();
