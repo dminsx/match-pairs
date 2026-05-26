@@ -8,14 +8,20 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
     />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>Match Pairs</title>
   </head>
   <body>
     <div class="header">
       <div class="name">Match Pairs</div>
 
-      <div class="counter">Счет<span id="score">0</span></div>
+      <div class="counter">Найдено пар<span id="score"></span></div>
       <div class="counter">Попыток<span id="attempts">0</span></div>
+      <div class="counter">
+        Время
+        <span id="time">
+          <span id="m">0</span>:<span id="s">00</span>.<span id="ms">00</span>
+        </span>
+      </div>
     </div>
     <div class="main"></div>
     <div class="footer">
