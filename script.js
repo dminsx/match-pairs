@@ -2,7 +2,11 @@ const newGame = document.getElementById("new-game");
 const score = document.getElementById("score");
 const attempts = document.getElementById("attempts");
 const board = document.querySelector(".main");
+const footer = document.querySelector(".footer");
 const difficulty = document.getElementById("difficulty");
+const minutes = document.getElementById("m");
+const seconds = document.getElementById("s");
+const milliSeconds = document.getElementById("ms");
 
 const emoji = [
   "⛲",
@@ -41,8 +45,77 @@ const emoji = [
 
 let firstCard = null;
 let secondCard = null;
+let timerId = null;
 let scoreCount = 0;
 let attemptsCount = 0;
+let milliSecondsValue = 0;
+
+function createEndButton() {
+  const endButton = document.createElement("button");
+  endButton.textContent = "Закончить игру";
+  endButton.id = "end-game";
+  footer.append(endButton);
+}
+
+function getEndButton() {
+  return document.getElementById("end-game");
+}
+
+function timer() {
+  milliSecondsValue += 10;
+
+  let msec = milliSecondsValue / 10;
+  let sec = Math.floor(milliSecondsValue / 1000) % 60;
+  let min = Math.floor(milliSecondsValue / 60000) % 60;
+
+  milliSeconds.textContent = String(msec).slice(-2).padStart(2, 0);
+  seconds.textContent = String(sec).padStart(2, 0);
+  minutes.textContent = min;
+}
+
+function startTimer() {
+  if (timerId !== null) return;
+  timerId = setInterval(timer, 10);
+}
+
+function endTimer() {
+  clearInterval(timerId);
+}
+
+function resetTimer() {
+  timerId = null;
+  milliSecondsValue = 0;
+  milliSeconds.textContent = "00";
+  seconds.textContent = "00";
+  minutes.textContent = "0";
+}
+
+function getTime() {
+  return `${minutes.textContent}:${seconds.textContent}.${milliSeconds.textContent}`;
+}
+
+function startScreen() {
+  if (getEndButton()) {
+    getEndButton().remove();
+  }
+
+  board.innerHTML = "";
+  difficulty.style = "";
+  board.style = "";
+  resetCards();
+  scoreCount = 0;
+  attemptsCount = 0;
+  updateScore();
+  updateAttempts();
+  endTimer();
+  resetTimer();
+
+  const img = document.createElement("img");
+  img.src = "/startScreen.png";
+  img.alt = "startScreen";
+  img.classList.add("start-screen");
+  board.append(img);
+}
 
 function getBoardSize() {
   return Number(difficulty.value);
@@ -67,7 +140,7 @@ function resetCards() {
 }
 
 function updateScore() {
-  score.textContent = scoreCount;
+  score.textContent = `${scoreCount}/${getBoardSize() ** 2 / 2}`;
 }
 
 function updateAttempts() {
@@ -121,10 +194,15 @@ function resetUnmatchedCards() {
 }
 
 function startNewGame() {
-  board.innerHTML = "";
+  if (getEndButton()) {
+    getEndButton().remove();
+  }
 
+  board.innerHTML = "";
+  difficulty.style.display = "none";
   createBoard();
   shuffleEmoji();
+  createEndButton();
 
   getCards().forEach((card) => {
     card.addEventListener("click", () => {
@@ -160,9 +238,14 @@ function startNewGame() {
       }
 
       if (scoreCount === getBoardSize() ** 2 / 2) {
+        endTimer();
+        const finishTime = getTime();
         setTimeout(() => {
-          alert(`Поздравляю, вы закончили игру за ${attemptsCount} попыток`);
-          startNewGame();
+          alert(
+            `Поздравляю, вы закончили игру за ${attemptsCount} попыток. Ваше время: ${finishTime}`,
+          );
+          startScreen();
+          resetTimer();
         }, 333);
       }
     });
@@ -173,11 +256,21 @@ function startNewGame() {
     closeCard(card);
   });
 
+  endTimer();
+  resetTimer();
+  startTimer();
+
   resetCards();
   scoreCount = 0;
   attemptsCount = 0;
   updateScore();
   updateAttempts();
+
+  getEndButton().addEventListener("click", startScreen);
 }
+
+startScreen();
+
+difficulty.addEventListener("change", updateScore);
 
 newGame.addEventListener("click", startNewGame);
