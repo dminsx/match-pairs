@@ -114,3 +114,23 @@ body {
     transform: scale(1);
   }
 }
+
+#end-game {
+  background: linear-gradient(150deg, #5ca4a7, #076465);
+  border-style: none;
+  border-radius: 15px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 23px;
+  color: #000000;
+  padding: 10px 15px 7px 15px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  &:active {
+    background: linear-gradient(150deg, #076465, #000000);
+    transform: scale(1);
+  }
+}
