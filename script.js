@@ -112,7 +112,7 @@ function startScreen() {
   resetTimer();
 
   const img = document.createElement("img");
-  img.src = "startScreen.png";
+  img.src = "/match-pairs/startScreen.png";
   img.alt = "startScreen";
   img.classList.add("start-screen");
   board.append(img);
