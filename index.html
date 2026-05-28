@@ -7,30 +7,38 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Match Pairs</title>
   </head>
   <body>
     <div class="header">
-      <div class="name">Match Pairs</div>
-
-      <div class="counter">Парочек<span id="score"></span></div>
-      <div class="counter">Попыток<span id="attempts">0</span></div>
-      <div class="counter">
-        Время
-        <span id="time">
-          <span id="m">0</span>:<span id="s">00</span>.<span id="ms">00</span>
-        </span>
+      <div class="header-name">
+        <div class="name">MATCH</div>
+        <div class="name name--second">PAIRS</div>
+      </div>
+      <div class="counters">
+        <div class="counter">Pairs<span id="score">0</span></div>
+        <div class="counter">Attempts<span id="attempts">0</span></div>
+        <div class="counter">
+          Time
+          <span id="time">
+            <span id="m">0</span>:<span id="s">00</span>.<span id="ms">00</span>
+          </span>
+        </div>
       </div>
     </div>
     <div class="main"></div>
     <div class="footer">
-      <select id="difficulty">
-        <option value="4">Легкий</option>
-        <option value="6">Средний</option>
-        <option value="8">Сложный</option>
+      <select class="button" id="difficulty">
+        <option value="4">Easy 4x4</option>
+        <option value="6">Medium 6x6</option>
+        <option value="8">Hard 8x8</option>
       </select>
-      <button id="new-game">Новая игра</button>
+      <button class="button" id="new-game">New Game</button>
     </div>
     <script src="script.js"></script>
   </body>
