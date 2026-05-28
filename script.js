@@ -64,19 +64,19 @@ function getEndButton() {
 }
 
 function timer() {
-  milliSecondsValue += 10;
+  milliSecondsValue += 100;
 
-  let msec = milliSecondsValue / 10;
+  let msec = milliSecondsValue / 100;
   let sec = Math.floor(milliSecondsValue / 1000) % 60;
   let min = Math.floor(milliSecondsValue / 60000) % 60;
 
-  milliSeconds.textContent = String(msec).slice(-2).padStart(2, 0);
+  milliSeconds.textContent = String(msec).slice(-1);
   seconds.textContent = String(sec).padStart(2, 0);
   minutes.textContent = min;
 }
 
 function startTimer() {
-  timerId = setInterval(timer, 10);
+  timerId = setInterval(timer, 100);
 }
 
 function endTimer() {
@@ -86,7 +86,7 @@ function endTimer() {
 function resetTimer() {
   timerId = null;
   milliSecondsValue = 0;
-  milliSeconds.textContent = "00";
+  milliSeconds.textContent = "0";
   seconds.textContent = "00";
   minutes.textContent = "0";
 }
