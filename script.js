@@ -1,6 +1,7 @@
 const newGame = document.getElementById("new-game");
 const score = document.getElementById("score");
 const attempts = document.getElementById("attempts");
+const header = document.querySelector(".header");
 const board = document.querySelector(".main");
 const footer = document.querySelector(".footer");
 const difficulty = document.getElementById("difficulty");
@@ -52,8 +53,9 @@ let milliSecondsValue = 0;
 
 function createEndButton() {
   const endButton = document.createElement("button");
-  endButton.textContent = "Закончить игру";
+  endButton.textContent = "End Game";
   endButton.id = "end-game";
+  endButton.classList.add("button");
   footer.append(endButton);
 }
 
@@ -74,7 +76,6 @@ function timer() {
 }
 
 function startTimer() {
-  if (timerId !== null) return;
   timerId = setInterval(timer, 10);
 }
 
@@ -115,6 +116,7 @@ function startScreen() {
   img.alt = "startScreen";
   img.classList.add("start-screen");
   board.append(img);
+  footer.append(newGame);
 }
 
 function getBoardSize() {
@@ -193,6 +195,19 @@ function resetUnmatchedCards() {
   resetCards();
 }
 
+function endGame() {
+  startScreen();
+  resetTimer();
+
+  header.classList.add("move-header-back-down");
+  board.classList.add("move-main-back-up");
+  footer.classList.add("move-main-back-up");
+
+  header.classList.remove("move-header-up");
+  board.classList.remove("move-main-down");
+  footer.classList.remove("move-main-down");
+}
+
 function startNewGame() {
   if (getEndButton()) {
     getEndButton().remove();
@@ -203,6 +218,7 @@ function startNewGame() {
   createBoard();
   shuffleEmoji();
   createEndButton();
+  newGame.remove();
 
   getCards().forEach((card) => {
     card.addEventListener("click", () => {
@@ -244,8 +260,7 @@ function startNewGame() {
           alert(
             `Поздравляю, вы закончили игру за ${attemptsCount} попыток. Ваше время: ${finishTime}`,
           );
-          startScreen();
-          resetTimer();
+          endGame();
         }, 333);
       }
     });
@@ -266,11 +281,29 @@ function startNewGame() {
   updateScore();
   updateAttempts();
 
-  getEndButton().addEventListener("click", startScreen);
+  getEndButton().addEventListener("click", () => {
+    let isEnd = confirm("Уверены, что хотите закончить игру?");
+    endTimer();
+    if (isEnd) {
+      endGame();
+    } else {
+      startTimer();
+    }
+  });
 }
 
 startScreen();
 
 difficulty.addEventListener("change", updateScore);
 
-newGame.addEventListener("click", startNewGame);
+newGame.addEventListener("click", () => {
+  setTimeout(startNewGame, 1000);
+
+  header.classList.remove("move-header-back-down");
+  board.classList.remove("move-main-back-up");
+  footer.classList.remove("move-main-back-up");
+
+  header.classList.add("move-header-up");
+  board.classList.add("move-main-down");
+  footer.classList.add("move-main-down");
+});
