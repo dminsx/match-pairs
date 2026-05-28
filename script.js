@@ -70,8 +70,6 @@ function timer() {
   let sec = Math.floor(milliSecondsValue / 1000) % 60;
   let min = Math.floor(milliSecondsValue / 60000) % 60;
 
-  console.log(msec);
-
   milliSeconds.textContent = String(msec).slice(-2).padStart(2, 0);
   seconds.textContent = String(sec).padStart(2, 0);
   minutes.textContent = min;
